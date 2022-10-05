@@ -13,6 +13,7 @@ import resources.TestRailSuitePage;
 
 public class TestRailMetricsGeneratorTool 
 {
+	// Test Case status's are to a specific TestRail project, will update later to make more general
 	int blocked;
 	int inReview;
 	int inProgress;
@@ -34,6 +35,14 @@ public class TestRailMetricsGeneratorTool
 		total = 0;
 	}
 	
+	/**
+	 * From console: Requests user to input:
+	 * TestRail domain
+	 * TestRail email
+	 * TestRail password
+	 * 
+	 * Then logs into TestRail, exports desired suite to csv
+	 */
 	public void downloadAllSections() throws InterruptedException 
 	{	
 		TestRailSuitePage trsp = new TestRailSuitePage();
@@ -61,6 +70,10 @@ public class TestRailMetricsGeneratorTool
 		driver.quit();
 	}
 	
+	/**
+	 * Pulls csv downloaded from TestRail, parses the Test Case status's, and prints status totals to console.
+	 * Then delets the csv file
+	 */
 	public void composeAllMetrics() throws IOException 
 	{
 		File csvFile = new File("C:\\Users\\kodel\\Downloads\\chicago_program_system_testing.csv");
@@ -72,6 +85,11 @@ public class TestRailMetricsGeneratorTool
 		csvFile.delete();
 	}
 	
+	/** TODO:
+	 * Update to parse all csv's
+	 * 
+	 * Currently configured to parse csv with specific configuration
+	 */
 	private String parseCsv(File csvFile) throws FileNotFoundException 
 	{
 		Scanner sc = new Scanner(csvFile);
@@ -84,6 +102,11 @@ public class TestRailMetricsGeneratorTool
 		
 	}
 	
+	/** TODO:
+	 * Update to parse for all Test Case status's
+	 * 
+	 * Currently configured to parse specific test case status's
+	 */
 	private void parseStatus(String statusString) 
 	{
 		String status = "";
@@ -113,6 +136,11 @@ public class TestRailMetricsGeneratorTool
 		}
 	}
 	
+	/** TODO:
+	 * Update to be able to print any test case status's
+	 * 
+	 * Currently configured to print specific test case status's
+	 */
 	private void printStatusTotals() 
 	{
 		total = blocked + inReview + inProgress + readyForReview + testReviewed + ready + link;
