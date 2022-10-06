@@ -76,7 +76,8 @@ public class TestRailMetricsGeneratorTool
 	 */
 	public void composeAllMetrics() throws IOException 
 	{
-		File csvFile = new File("C:\\Users\\kodel\\Downloads\\chicago_program_system_testing.csv");
+		File csvFile = new File("/home/vivi/Downloads/chicago_program_system_testing.csv");
+		//File csvFile = new File("C:\\Users\\kodel\\Downloads\\chicago_program_system_testing.csv");
 		String statusString = parseCsv(csvFile);
 		
 		parseStatus(statusString);
@@ -154,14 +155,14 @@ public class TestRailMetricsGeneratorTool
 		System.out.println("Link = " + link);
 		System.out.println("Total = " + total);
 		
-		System.out.println("\nBlocked = " + ((double) blocked / total) * 100);
-		System.out.println("In Review = " + ((double) inReview / total) * 100);
-		System.out.println("In Progress = " + ((double) inProgress / total) * 100);
-		System.out.println("Ready For Review = " + ((double) readyForReview / total) * 100);
-		System.out.println("Test Reviewed = " + ((double) testReviewed / total) * 100);
-		System.out.println("Ready = " + ((double) ready / total) * 100);
-		System.out.println("Link = " + ((double) link / total) * 100);
-		System.out.println("Total = " + ((double) total / total) * 100);
-		System.out.println("Percent complete based on original estimates: " + ((double) total / 1767.0) * 100);
+		System.out.printf("\nBlocked = %.0f%%\n", ((double) blocked / total) * 100);
+		System.out.printf("In Review = %.0f%%\n", ((double) inReview / total) * 100);
+		System.out.printf("In Progress = %.0f%%\n", ((double) inProgress / total) * 100);
+		System.out.printf("Ready For Review = %.0f%%\n", ((double) readyForReview / total) * 100);
+		System.out.printf("Test Reviewed = %.0f%%\n", ((double) testReviewed / total) * 100);
+		System.out.printf("Ready = %.0f%%\n", ((double) ready / total) * 100);
+		System.out.printf("Link = %.0f%%\n", ((double) link / total) * 100);
+		System.out.printf("Total = %.0f%%\n", ((double) total / total) * 100);
+		System.out.printf("Percent complete based on original estimates: %.0f%%\n", ((double) total / 1767.0) * 100);
 	}
 }
