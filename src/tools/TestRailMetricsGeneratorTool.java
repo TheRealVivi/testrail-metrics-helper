@@ -58,7 +58,6 @@ public class TestRailMetricsGeneratorTool
 		System.out.print("TestRail password: ");
 		trlp.setPassword(in.nextLine());
 		
-		System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
 		WebDriver driver = TestRailSuitePage.initializeDriver();
 		
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
@@ -75,7 +74,7 @@ public class TestRailMetricsGeneratorTool
 		
 		return fileName;
 	}
-	// chicago_program_system_testing.csv
+	
 	/**
 	 * Pulls csv downloaded from TestRail, parses the Test Case status's, and prints status totals to console.
 	 * Then deletes the csv file
