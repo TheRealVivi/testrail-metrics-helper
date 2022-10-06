@@ -43,7 +43,7 @@ public class TestRailMetricsGeneratorTool
 	 * 
 	 * Then logs into TestRail, exports desired suite to csv
 	 */
-	public void downloadAllSections() throws InterruptedException 
+	public String downloadAllSections() throws InterruptedException 
 	{	
 		TestRailSuitePage trsp = new TestRailSuitePage();
 		TestRailLoginPage trlp = new TestRailLoginPage();
@@ -65,25 +65,41 @@ public class TestRailMetricsGeneratorTool
 		
 		trsp.getURL(driver);
 		trlp.login(driver);
-		trsp.downloadAllSections(driver);
+		String fileName = trsp.downloadAllSections(driver);
+		
+		//System.out.println("fileName: " + fileName);
+		fileName = filefy(fileName);
+		//System.out.println("fileName: " + fileName);
 		
 		driver.quit();
+		
+		return fileName;
 	}
-	
+	// chicago_program_system_testing.csv
 	/**
 	 * Pulls csv downloaded from TestRail, parses the Test Case status's, and prints status totals to console.
-	 * Then delets the csv file
+	 * Then deletes the csv file
 	 */
-	public void composeAllMetrics() throws IOException 
+	public void composeAllMetrics(String fileName) throws IOException 
 	{
-		File csvFile = new File("/home/vivi/Downloads/chicago_program_system_testing.csv");
-		//File csvFile = new File("C:\\Users\\kodel\\Downloads\\chicago_program_system_testing.csv");
+		//File csvFile = new File("/home/vivi/Downloads/" + fileName);
+		String home = System.getProperty("user.home");
+		File csvFile = new File(home + "\\Downloads\\" + fileName);
 		String statusString = parseCsv(csvFile);
 		
 		parseStatus(statusString);
 		printStatusTotals();
 	    
 		csvFile.delete();
+	}
+	
+	private String filefy(String fileName) 
+	{
+		fileName = fileName.toLowerCase();
+		fileName = fileName.replace(' ', '_');
+		fileName += ".csv";
+		
+		return fileName;
 	}
 	
 	/** TODO:

@@ -9,6 +9,8 @@ public class TestRailSuitePage extends Base
 	private String domain;
 	private String URL = "https://" + domain + ".testrail.net/index.php?/suites/view/33353&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
 	
+	private final By PROJECT_NAME_LINK = By.id("navigation-project");
+	
 	private final By EXPORT_BUTTON = By.className("icon-export");
 	private final By EXPORT_EXCEL_OPTION = By.className("icon-excel-10");
 	
@@ -25,6 +27,10 @@ public class TestRailSuitePage extends Base
 	
 	public void getURL(WebDriver driver) {
 		driver.get(URL);
+	}
+	
+	public String getProjectName(WebDriver driver) {
+		return driver.findElement(PROJECT_NAME_LINK).getText();
 	}
 
 	public WebElement getExportButton(WebDriver driver) {
@@ -47,15 +53,19 @@ public class TestRailSuitePage extends Base
 		return driver.findElement(EXPORT_SUBMIT_BUTTON);
 	}
 	
-	public void downloadAllSections(WebDriver driver) throws InterruptedException 
+	public String downloadAllSections(WebDriver driver) throws InterruptedException 
 	{
+		
 		Thread.sleep(2000);
+		String projectName = this.getProjectName(driver);
 		this.getExportButton(driver).click();
 		Thread.sleep(1000);
 		this.getExportExcelOpton(driver).click();
 		Thread.sleep(500);
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
+		
+		return projectName;
 	}
 	
 }
