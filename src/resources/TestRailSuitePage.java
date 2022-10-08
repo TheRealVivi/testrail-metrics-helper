@@ -73,7 +73,7 @@ public class TestRailSuitePage extends Base
 		this.getExportButton(driver).click();
 		Thread.sleep(1000);
 		this.getExportExcelOpton(driver).click();
-		Thread.sleep(500);
+		Thread.sleep(800);
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
 		
@@ -87,7 +87,7 @@ public class TestRailSuitePage extends Base
 		this.getExportButton(driver).click();
 		Thread.sleep(1000);
 		this.getExportExcelOpton(driver).click();
-		Thread.sleep(500);
+		Thread.sleep(800);
 		this.getExportSelectSectionsOnlyRadioButton(driver).click();
 		Select sectionSelection = this.getSectionSelect(driver);
 		

@@ -181,14 +181,25 @@ public class TestRailMetricsGeneratorTool
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
-		System.out.print("TestRail domain: ");
-		trsp.setDomain(in.nextLine());
-		System.out.print("TestRail email: ");
-		this.email = in.nextLine();
-		trlp.setEmail(this.email);
-		System.out.print("TestRail password: ");
-		this.password = in.nextLine();
-		trlp.setPassword(this.password);
+		if(!loggedIn) 
+		{
+			System.out.print("TestRail domain: ");
+			trsp.setDomain(in.nextLine());
+			System.out.print("TestRail email: ");
+			this.email = in.nextLine();
+			trlp.setEmail(this.email);
+			System.out.print("TestRail password: ");
+			this.password = in.nextLine();
+			trlp.setPassword(this.password);
+			
+			loggedIn = true;
+		}
+		else 
+		{
+			trsp.setDomain("cubictest");
+			trlp.setEmail(this.email);
+			trlp.setPassword(this.password);
+		}
 		
 		WebDriver driver = TestRailSuitePage.initializeDriver();
 		
