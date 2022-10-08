@@ -9,8 +9,8 @@ public class Base
 	{
 		WebDriver driver;
 		
-		System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
-		//System.setProperty("webdriver.chrome.driver", "/home/vivi/webdrivers/chromedriver");
+		//System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "/home/vivi/webdrivers/chromedriver");
 		driver = new ChromeDriver();
 		
 		return driver;
