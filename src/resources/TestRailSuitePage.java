@@ -1,8 +1,13 @@
 package resources;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
 public class TestRailSuitePage extends Base
 {
@@ -17,8 +22,15 @@ public class TestRailSuitePage extends Base
 	private final By EXPORT_ALL_SECTIONS_RADIO_BUTTON = By.id("exportCsvSectionsAll");
 	private final By EXPORT_SELECT_SECTIONS_ONLY_RADIO_BUTTON = By.id("exportCsvSectionsSelected");
 	
+	private final By SECTION_SELECT = By.id("exportCsvSectionsSelection");
+	
 	private final By EXPORT_SUBMIT_BUTTON = By.id("exportSubmit");
 
+	public Select getSectionSelect(WebDriver driver) 
+	{
+		return new Select(driver.findElement(SECTION_SELECT));
+	}
+	
 	public void setDomain(String domain) 
 	{
 		this.domain = domain;
@@ -62,6 +74,37 @@ public class TestRailSuitePage extends Base
 		Thread.sleep(1000);
 		this.getExportExcelOpton(driver).click();
 		Thread.sleep(500);
+		this.getExportSubmitButton(driver).click();
+		Thread.sleep(3000);
+		
+		return projectName;
+	}
+	
+	public String downloadMainSections(WebDriver driver, int fromSection, int toSection) throws InterruptedException 
+	{
+		Thread.sleep(2000);
+		String projectName = this.getProjectName(driver);
+		this.getExportButton(driver).click();
+		Thread.sleep(1000);
+		this.getExportExcelOpton(driver).click();
+		Thread.sleep(500);
+		this.getExportSelectSectionsOnlyRadioButton(driver).click();
+		Select sectionSelection = this.getSectionSelect(driver);
+		
+		//sectionSelection.selectByIndex(fromSection);
+		//sectionSelection.selectByIndex(toSection);
+		List<WebElement> options = sectionSelection.getOptions();
+		Actions aBuilder = new Actions(driver);
+		aBuilder.keyDown(Keys.SHIFT)
+				.click(options.get(fromSection))
+				.click(options.get(toSection))
+				.keyUp(Keys.SHIFT)
+				.perform();
+		
+		System.out.println("===============\n"
+						 + "Section " + sectionSelection.getFirstSelectedOption().getText());
+		
+				
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
 		

@@ -9,7 +9,9 @@ public class TestMetrics
 	public static void main(String[] args) throws InterruptedException, IOException
 	{
 		TestRailMetricsGeneratorTool testRailTool = new TestRailMetricsGeneratorTool();
-		String fileName = testRailTool.downloadAllSections();
-		testRailTool.composeAllMetrics(fileName);
+		testRailTool.mainMenu();
+		//String fileName = testRailTool.downloadAllSections();
+		//String fileName = testRailTool.downloadSelectSections(0);
+		//testRailTool.composeAllTestCaseStatusMetrics(fileName);
 	}
 }
