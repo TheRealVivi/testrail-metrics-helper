@@ -257,9 +257,9 @@ public class TestRailMetricsGeneratorTool
 	 */
 	private void composeAllTestCaseStatusMetrics(String fileName) throws IOException 
 	{
-		File csvFile = new File("/home/vivi/Downloads/" + fileName);
-		//String home = System.getProperty("user.home");
-		//File csvFile = new File(home + "\\Downloads\\" + fileName);
+		//File csvFile = new File("/home/vivi/Downloads/" + fileName);
+		String home = System.getProperty("user.home");
+		File csvFile = new File(home + "\\Downloads\\" + fileName);
 		String statusString = parseCsv(csvFile);
 		
 		parseStatus(statusString);
