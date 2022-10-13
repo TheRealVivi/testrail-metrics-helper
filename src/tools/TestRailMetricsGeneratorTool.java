@@ -288,7 +288,7 @@ public class TestRailMetricsGeneratorTool
 		Scanner sc = new Scanner(csvFile);
 		sc.useDelimiter(",");
 		
-		sc.next();
+		//sc.next();
 		String statusString = sc.next();
 		sc.close();
 		return statusString;

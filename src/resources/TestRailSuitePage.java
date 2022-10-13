@@ -17,7 +17,7 @@ public class TestRailSuitePage extends Base
 	private final By PROJECT_NAME_LINK = By.id("navigation-project");
 	
 	private final By EXPORT_BUTTON = By.className("icon-export");
-	private final By EXPORT_EXCEL_OPTION = By.className("icon-excel-10");
+	private final By EXPORT_CSV_OPTION = By.className("icon-csv-10");
 	
 	private final By EXPORT_ALL_SECTIONS_RADIO_BUTTON = By.id("exportCsvSectionsAll");
 	private final By EXPORT_SELECT_SECTIONS_ONLY_RADIO_BUTTON = By.id("exportCsvSectionsSelected");
@@ -49,8 +49,8 @@ public class TestRailSuitePage extends Base
 		return driver.findElement(EXPORT_BUTTON);
 	}
 
-	public WebElement getExportExcelOpton(WebDriver driver) {
-		return driver.findElement(EXPORT_EXCEL_OPTION);
+	public WebElement getExportCsvOption(WebDriver driver) {
+		return driver.findElement(EXPORT_CSV_OPTION);
 	}
 
 	public WebElement getExportAllSectionsRadioButton(WebDriver driver) {
@@ -72,7 +72,7 @@ public class TestRailSuitePage extends Base
 		String projectName = this.getProjectName(driver);
 		this.getExportButton(driver).click();
 		Thread.sleep(1000);
-		this.getExportExcelOpton(driver).click();
+		this.getExportCsvOption(driver).click();
 		Thread.sleep(800);
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
@@ -86,15 +86,15 @@ public class TestRailSuitePage extends Base
 		String projectName = this.getProjectName(driver);
 		this.getExportButton(driver).click();
 		Thread.sleep(1000);
-		this.getExportExcelOpton(driver).click();
+		this.getExportCsvOption(driver).click();
 		Thread.sleep(800);
 		this.getExportSelectSectionsOnlyRadioButton(driver).click();
+		
 		Select sectionSelection = this.getSectionSelect(driver);
 		
-		//sectionSelection.selectByIndex(fromSection);
-		//sectionSelection.selectByIndex(toSection);
 		List<WebElement> options = sectionSelection.getOptions();
 		Actions aBuilder = new Actions(driver);
+		
 		aBuilder.keyDown(Keys.SHIFT)
 				.click(options.get(fromSection))
 				.click(options.get(toSection))
