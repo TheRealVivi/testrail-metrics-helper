@@ -80,7 +80,7 @@ public class TestRailSuitePage extends Base
 		return projectName;
 	}
 	
-	public String downloadMainSections(WebDriver driver, int fromSection, int toSection) throws InterruptedException 
+	public String[] downloadMainSections(WebDriver driver, int fromSection, int toSection) throws InterruptedException 
 	{
 		Thread.sleep(2000);
 		String projectName = this.getProjectName(driver);
@@ -101,14 +101,18 @@ public class TestRailSuitePage extends Base
 				.keyUp(Keys.SHIFT)
 				.perform();
 		
+		String sectionName = sectionSelection.getFirstSelectedOption().getText();
+		
 		System.out.println("===============\n"
-						 + "Section " + sectionSelection.getFirstSelectedOption().getText());
+						 + "Section " + sectionName);
 		
 				
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
 		
-		return projectName;
+		String[] info = { projectName, sectionName };
+		
+		return info;
 	}
 	
 }
