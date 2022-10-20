@@ -80,7 +80,8 @@ public class TestRailMetricsGeneratorTool
 			if(option == 1) 
 			{
 				this.option = option;
-				File outCsvFile = new File("consolidatedMetrics.csv");
+				String home = System.getProperty("user.home");
+				File outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
 				PrintWriter out = new PrintWriter(outCsvFile);
 				String fileName = this.downloadAllSections();
 				this.composeAllTestCaseStatusMetrics(fileName, out);
@@ -89,7 +90,8 @@ public class TestRailMetricsGeneratorTool
 			else if(option == 2) 
 			{
 				this.option = option;
-				File outCsvFile = new File("sectionMetrics.csv");
+				String home = System.getProperty("user.home");
+				File outCsvFile = new File(home + "\\Documents\\sectionMetrics.csv");
 				PrintWriter out = new PrintWriter(outCsvFile);
 				/*
 				System.out.print("From index >> ");
