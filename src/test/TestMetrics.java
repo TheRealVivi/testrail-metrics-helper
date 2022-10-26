@@ -10,8 +10,5 @@ public class TestMetrics
 	{
 		TestRailMetricsGeneratorTool testRailTool = new TestRailMetricsGeneratorTool();
 		testRailTool.mainMenu();
-		//String fileName = testRailTool.downloadAllSections();
-		//String fileName = testRailTool.downloadSelectSections(0);
-		//testRailTool.composeAllTestCaseStatusMetrics(fileName);
 	}
 }

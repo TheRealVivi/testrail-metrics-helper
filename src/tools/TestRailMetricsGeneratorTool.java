@@ -25,6 +25,14 @@ public class TestRailMetricsGeneratorTool
 	int total;
 	int secNum;
 	
+	private final String BLOCKED_DESCRIPTION = "Unable to complete due to blocked process within pipeline";
+	private final String IN_REVIEW_DESCRIPTION = "Test case needs to be reviewed and have modifications applied";
+	private final String IN_PROGRESS_DESCRIPTION = "Test case is being worked on";
+	private final String READY_FOR_REVIEW_DESCRIPTION = "Ready to be reviewed by the Test Review team";
+	private final String TEST_REVIEWED_DESCRIPTION = "Ready to be reviewed by the Program Review team";
+	private final String READY_DESCRIPTION = "Ready to be reviewed by the customer";
+	private final String LINK_DESCRIPTION = "References need to be updated";
+	
 	boolean loggedIn;
 	String email;
 	String password;
@@ -313,6 +321,10 @@ public class TestRailMetricsGeneratorTool
 		this.resetValues();
 	}
 	
+	/** 
+	 *  \Brief: Pulls project name, makes it lowercase, and replaces white space with underscores, then attaches .csv to the end 
+	 *  \Returns: official file name
+	 */
 	private String filefy(String fileName) 
 	{
 		fileName = fileName.toLowerCase();
@@ -384,9 +396,7 @@ public class TestRailMetricsGeneratorTool
 	 * Currently configured to print specific test case status's
 	 */
 	private void printStatusTotals() 
-	{
-		//total = blocked + inReview + inProgress + readyForReview + testReviewed + ready + link;
-		
+	{		
 		System.out.println("\nBlocked = " + blocked);
 		System.out.println("In Review = " + inReview);
 		System.out.println("In Progress = " + inProgress);
@@ -401,42 +411,21 @@ public class TestRailMetricsGeneratorTool
 				((double) testReviewed / total) * 100, ((double) ready / total) * 100, ((double) link / total) * 100);
 		System.out.printf("\nPercent complete based on original estimates: %.0f%%\n", ((double) total / 1767.0) * 100);
 		
-		/*
-		System.out.printf("\nBlocked = %.0f%%\n", ((double) blocked / total) * 100);
-		System.out.printf("In Review = %.0f%%\n", ((double) inReview / total) * 100);
-		System.out.printf("In Progress = %.0f%%\n", ((double) inProgress / total) * 100);
-		System.out.printf("Ready For Review = %.0f%%\n", ((double) readyForReview / total) * 100);
-		System.out.printf("Test Reviewed = %.0f%%\n", ((double) testReviewed / total) * 100);
-		System.out.printf("Ready = %.0f%%\n", ((double) ready / total) * 100);
-		System.out.printf("Link = %.0f%%\n", ((double) link / total) * 100);
-		System.out.printf("Total = %.0f%%\n", ((double) total / total) * 100);
-		System.out.printf("Percent complete based on original estimates: %.0f%%\n", ((double) total / 1767.0) * 100);
-		*/
 	}
 	
 	private void writeToCsv(PrintWriter out) throws FileNotFoundException 
 	{		
 		if(this.option == 1) 
 		{
-			out.print("Test Case Status, Test Count\n");
-			out.printf("Blocked, %d\n", this.blocked);
-			out.printf("In Review, %d\n", this.inReview);
-			out.printf("In Progress, %d\n", this.inProgress);
-			out.printf("Ready for Review, %d\n", this.readyForReview);
-			out.printf("Test Reviewed, %d\n", this.testReviewed);
-			out.printf("Ready, %d\n", this.ready);
-			out.printf("Link, %d\n", this.link);
-			out.printf("Grand Total, %d\n\n", this.total);
-			
-			out.print("Test Case Status, Test Count %\n");
-			out.printf("Blocked, %.2f%%\n", ((double) blocked / total) * 100);
-			out.printf("In Review, %.2f%%\n", ((double) inReview / total) * 100);
-			out.printf("In Progress, %.2f%%\n", ((double) inProgress / total) * 100);
-			out.printf("Ready for Review, %.2f%%\n", ((double) readyForReview / total) * 100);
-			out.printf("Test Reviewed, %.2f%%\n", ((double) testReviewed / total) * 100);
-			out.printf("Ready, %.2f%%\n", ((double) ready / total) * 100);
-			out.printf("Link, %.2f%%\n", ((double) link / total) * 100);
-			out.printf("Grand Total, %.2f%%\n", ((double) total / total) * 100);
+			out.print("Test Case Status, Test Count, Test Count %, Description\n");
+			out.printf("Blocked, %d, %.2f%%, %s\n", this.blocked, ((double) blocked / total) * 100, this.BLOCKED_DESCRIPTION);
+			out.printf("In Review, %d, %.2f%%, %s\n", this.inReview, ((double) inReview / total) * 100, this.IN_REVIEW_DESCRIPTION);
+			out.printf("In Progress, %d, %.2f%%, %s\n", this.inProgress, ((double) inProgress / total) * 100, this.IN_PROGRESS_DESCRIPTION);
+			out.printf("Ready for Review, %d, %.2f%%, %s\n", this.readyForReview, ((double) readyForReview / total) * 100, this.READY_FOR_REVIEW_DESCRIPTION);
+			out.printf("Test Reviewed, %d, %.2f%%, %s\n", this.testReviewed, ((double) testReviewed / total) * 100, this.TEST_REVIEWED_DESCRIPTION);
+			out.printf("Ready, %d, %.2f%%, %s\n", this.ready, ((double) ready / total) * 100, this.READY_DESCRIPTION);
+			out.printf("Link, %d, %.2f%%, %s\n", this.link, ((double) link / total) * 100, this.LINK_DESCRIPTION);
+			out.printf("Grand Total, %d, %.2f%%, %s\n", this.total, ((double) total / total) * 100, "Total number of test cases");
 		}
 		else if(this.option == 2) 
 		{
