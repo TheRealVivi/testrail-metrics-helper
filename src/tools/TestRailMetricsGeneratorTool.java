@@ -10,6 +10,7 @@ import java.util.Scanner;
 import org.openqa.selenium.WebDriver;
 
 import resources.TestRailLoginPage;
+import resources.TestRailRunsPage;
 import resources.TestRailSuitePage;
 
 public class TestRailMetricsGeneratorTool 
@@ -31,15 +32,16 @@ public class TestRailMetricsGeneratorTool
 	private final String READY_FOR_REVIEW_DESCRIPTION = "Ready to be reviewed by the Test Review team";
 	private final String TEST_REVIEWED_DESCRIPTION = "Ready to be reviewed by the Program Review team";
 	private final String READY_DESCRIPTION = "Ready to be reviewed by the customer";
-	private final String LINK_DESCRIPTION = "References need to be updated";
+	private final String LINK_DESCRIPTION = "Test case up to standards; references need to be updated";
 	
 	boolean loggedIn;
 	String email;
 	String password;
 	String domain;
 	
-	private final String DOWNLOAD_ALL_SECTIONS = "Download all sections";
-	private final String DOWNLOAD_SELECT_SECTIONS = "Download select sections";
+	private final String DOWNLOAD_ALL_SUITE_SECTIONS = "Download all suite sections";
+	private final String DOWNLOAD_SELECT_SUITE_SECTIONS = "Download select suite sections";
+	private final String DOWNLOAD_ALL_RUN_SECTIONS = "Download all run sections";
 	private final int CSV_TITLE = 0;
 	private final int BR_SECTION = 2;
 	private final int TEST_CASE_COUNT = 3;
@@ -81,8 +83,9 @@ public class TestRailMetricsGeneratorTool
 							+ "Please select an option:\n"
 							+ "1. Print consolidated section metrics\n"
 							+ "2. Print metrics per section\n"
-							+ "3. Quit\n"
-							+ "Input option (1-3) >> ");
+							+ "3. Print test run metrics\n"
+							+ "4. Quit\n"
+							+ "Input option (1-4) >> ");
 			int option = in.nextInt();
 			
 			if(option == 1) 
@@ -115,6 +118,20 @@ public class TestRailMetricsGeneratorTool
 				secNum = 1;
 			}
 			else if(option == 3) 
+			{
+				this.option = option;
+				String home = System.getProperty("user.home");
+				File outCsvFile = new File(home + "\\Documents\\testRunConsolidatedMetrics.csv");
+				PrintWriter out = new PrintWriter(outCsvFile);
+				String fileName = this.downloadAllRunSections();
+				System.out.println(fileName);
+				toolActive = false;
+				//this.composeAllTestRunStatusMetrics(fileName, out);
+				
+				out.close();
+				
+			}
+			else if(option == 4) 
 			{
 				toolActive = false;
 			}
@@ -221,7 +238,7 @@ public class TestRailMetricsGeneratorTool
 	 * 
 	 * Logs into TestRail, stores login info for same session use
 	 */
-	private void loginTestRailConsoleUI(TestRailSuitePage trsp, TestRailLoginPage trlp) 
+	private void loginTestRailConsoleUI(TestRailSuitePage trsp, TestRailRunsPage trrp, TestRailLoginPage trlp) 
 	{
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
@@ -233,6 +250,7 @@ public class TestRailMetricsGeneratorTool
 			System.out.print("TestRail domain: ");
 			this.domain = in.nextLine();
 			trsp.setDomain(this.domain);
+			trrp.setDomain(this.domain);
 			System.out.print("TestRail email: ");
 			this.email = in.nextLine();
 			trlp.setEmail(this.email);
@@ -244,6 +262,7 @@ public class TestRailMetricsGeneratorTool
 		}
 		else 
 		{
+			trrp.setDomain(this.domain);
 			trsp.setDomain(this.domain);
 			trlp.setEmail(this.email);
 			trlp.setPassword(this.password);
@@ -253,34 +272,41 @@ public class TestRailMetricsGeneratorTool
 	// Exports csv containing all suite sections
 	private String downloadAllSections() throws InterruptedException 
 	{	
-		return downloadHelper(DOWNLOAD_ALL_SECTIONS, 0, 0);
+		return downloadHelper(DOWNLOAD_ALL_SUITE_SECTIONS, 0, 0);
 	}
 	
 	// Exports csv containing select suite sections
 	private String downloadSelectSections(int fromSection, int toSection) throws InterruptedException 
 	{
-		return downloadHelper(DOWNLOAD_SELECT_SECTIONS, fromSection, toSection);
+		return downloadHelper(DOWNLOAD_SELECT_SUITE_SECTIONS, fromSection, toSection);
+	}
+	
+	private String downloadAllRunSections() throws InterruptedException 
+	{
+		return downloadHelper(DOWNLOAD_ALL_RUN_SECTIONS, 0, 0);
 	}
 	
 	private String downloadHelper(String option, int fromSection, int toSection) throws InterruptedException 
 	{
 		String fileName;
 		TestRailSuitePage trsp = new TestRailSuitePage();
+		TestRailRunsPage trrp = new TestRailRunsPage();
 		TestRailLoginPage trlp = new TestRailLoginPage();
 		
-		this.loginTestRailConsoleUI(trsp, trlp);
+		this.loginTestRailConsoleUI(trsp, trrp, trlp);
 		
-		WebDriver driver = TestRailSuitePage.initializeDriver();
+		WebDriver driver = TestRailLoginPage.initializeDriver();
 		
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 		
-		trsp.getURL(driver);
-		trlp.login(driver);
-		
-		if(option.equals(DOWNLOAD_ALL_SECTIONS)) {
+		if(option.equals(DOWNLOAD_ALL_SUITE_SECTIONS)) {
+			trsp.getURL(driver);
+			trlp.login(driver);
 			fileName = trsp.downloadAllSections(driver);
 		}
-		else if(option.equals(DOWNLOAD_SELECT_SECTIONS)) {
+		else if(option.equals(DOWNLOAD_SELECT_SUITE_SECTIONS)) {
+			trsp.getURL(driver);
+			trlp.login(driver);
 			String[] temp = new String[2];
 			temp = trsp.downloadMainSections(driver, fromSection, toSection);
 			this.tableDetails[CSV_TITLE] = temp[CSV_TITLE];
@@ -288,7 +314,15 @@ public class TestRailMetricsGeneratorTool
 			fileName = this.tableDetails[CSV_TITLE];
 			//fileName = trsp.downloadMainSections(driver, fromSection, toSection);
 		}
+		else if(option.equals(DOWNLOAD_ALL_RUN_SECTIONS)) 
+		{
+			trrp.getURL(driver);
+			trlp.login(driver);
+			fileName = trrp.downloadAllSections(driver);
+		}
 		else {
+			trsp.getURL(driver);
+			trlp.login(driver);
 			fileName = trsp.downloadAllSections(driver);
 		}
 		
@@ -329,6 +363,7 @@ public class TestRailMetricsGeneratorTool
 	{
 		fileName = fileName.toLowerCase();
 		fileName = fileName.replace(' ', '_');
+		fileName = fileName.replace('-', '_');
 		fileName += ".csv";
 		
 		return fileName;

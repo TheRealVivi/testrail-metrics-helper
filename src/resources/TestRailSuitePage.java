@@ -11,20 +11,20 @@ import org.openqa.selenium.support.ui.Select;
 
 public class TestRailSuitePage extends Base
 {
-	private String domain;
+	protected String domain;
 	private String URL = "https://" + domain + ".testrail.net/index.php?/suites/view/33353&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
 	
 	private final By PROJECT_NAME_LINK = By.id("navigation-project");
 	
-	private final By EXPORT_BUTTON = By.className("icon-export");
-	private final By EXPORT_CSV_OPTION = By.className("icon-csv-10");
+	protected final By EXPORT_BUTTON = By.className("icon-export");
+	protected final By EXPORT_CSV_OPTION = By.className("icon-csv-10");
 	
-	private final By EXPORT_ALL_SECTIONS_RADIO_BUTTON = By.id("exportCsvSectionsAll");
-	private final By EXPORT_SELECT_SECTIONS_ONLY_RADIO_BUTTON = By.id("exportCsvSectionsSelected");
+	protected final By EXPORT_ALL_SECTIONS_RADIO_BUTTON = By.id("exportCsvSectionsAll");
+	protected final By EXPORT_SELECT_SECTIONS_ONLY_RADIO_BUTTON = By.id("exportCsvSectionsSelected");
 	
-	private final By SECTION_SELECT = By.id("exportCsvSectionsSelection");
+	protected final By SECTION_SELECT = By.id("exportCsvSectionsSelection");
 	
-	private final By EXPORT_SUBMIT_BUTTON = By.id("exportSubmit");
+	protected final By EXPORT_SUBMIT_BUTTON = By.id("exportSubmit");
 
 	public Select getSectionSelect(WebDriver driver) 
 	{
