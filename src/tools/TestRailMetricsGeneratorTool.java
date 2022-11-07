@@ -143,6 +143,52 @@ public class TestRailMetricsGeneratorTool
 		System.out.println("\nGoodbye\n");
 	}
 	
+	public void mainMenu(int option) throws IOException, InterruptedException 
+	{
+		if(option == 1) 
+		{
+			this.option = option;
+			String home = System.getProperty("user.home");
+			File outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+			PrintWriter out = new PrintWriter(outCsvFile);
+			String fileName = this.downloadAllSections();
+			this.composeAllTestCaseStatusMetrics(fileName, out);
+			out.close();
+		}
+		else if(option == 2) 
+		{
+			this.option = option;
+			String home = System.getProperty("user.home");
+			File outCsvFile = new File(home + "\\Documents\\sectionMetrics.csv");
+			PrintWriter out = new PrintWriter(outCsvFile);
+			/*
+			System.out.print("From index >> ");
+			int fromIndex = in.nextInt();
+			System.out.print("To index >> ");
+			int toIndex = in.nextInt();
+			String fileName = this.downloadSelectSections(fromIndex, toIndex);
+			this.composeAllTestCaseStatusMetrics(fileName);
+			*/
+				
+			specificSectionNumbers(out); // TODO: swap out with a way to identify section names
+			out.close();
+			secNum = 1;
+		}
+		else if(option == 3) 
+		{
+			this.option = option;
+			String home = System.getProperty("user.home");
+			File outCsvFile = new File(home + "\\Documents\\testRunConsolidatedMetrics.csv");
+			PrintWriter out = new PrintWriter(outCsvFile);
+			String fileName = this.downloadAllRunSections();
+			System.out.println(fileName);
+			//this.composeAllTestRunStatusMetrics(fileName, out);
+				
+			out.close();
+		
+		}
+	}
+	
 	private void resetValues() 
 	{
 		blocked = 0; 
