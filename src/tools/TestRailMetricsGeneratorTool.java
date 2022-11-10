@@ -143,8 +143,16 @@ public class TestRailMetricsGeneratorTool
 		System.out.println("\nGoodbye\n");
 	}
 	
-	public void mainMenu(int option) throws IOException, InterruptedException 
+	public void mainMenu(int option, String domain, String email, String password) throws IOException, InterruptedException 
 	{
+		if(!domain.isEmpty() && !email.isEmpty() && !password.isEmpty()) 
+		{
+			this.domain = domain;
+			this.email = email;
+			this.password = password;
+			this.loggedIn = true;
+		}
+		
 		if(option == 1) 
 		{
 			this.option = option;
