@@ -16,6 +16,11 @@ import resources.TestRailSuitePage;
 
 public class TestRailMetricsGeneratorTool 
 {
+	private final String WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS = "\\Documents\\consolidatedMetrics.csv";
+	private final String LINUX_MACOS_PATH_SUITE_CONSOLIDATEDMETRICS = "/Documents/consolidatedMetrics.csv";
+	private final String WINDOWS_PATH_SUITE_SECTIONMETRICS = "\\Documents\\sectionMetrics.csv";
+	private final String WINDOWS_PATH_RUN_CONSOLIDATEDMETRICS = "\\Documents\\testRunConsolidatedMetrics.csv";
+	
 	// Test Case status's are to a specific TestRail project, will update later to make more general
 	int blocked;
 	int inReview;
@@ -93,7 +98,7 @@ public class TestRailMetricsGeneratorTool
 			{
 				this.option = option;
 				String home = System.getProperty("user.home");
-				File outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+				File outCsvFile = new File(home + WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS);
 				PrintWriter out = new PrintWriter(outCsvFile);
 				String fileName = this.downloadAllSections();
 				this.composeAllTestCaseStatusMetrics(fileName, out);
@@ -103,7 +108,7 @@ public class TestRailMetricsGeneratorTool
 			{
 				this.option = option;
 				String home = System.getProperty("user.home");
-				File outCsvFile = new File(home + "\\Documents\\sectionMetrics.csv");
+				File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
 				PrintWriter out = new PrintWriter(outCsvFile);
 				/*
 				System.out.print("From index >> ");
@@ -122,7 +127,7 @@ public class TestRailMetricsGeneratorTool
 			{
 				this.option = option;
 				String home = System.getProperty("user.home");
-				File outCsvFile = new File(home + "\\Documents\\testRunConsolidatedMetrics.csv");
+				File outCsvFile = new File(home + WINDOWS_PATH_RUN_CONSOLIDATEDMETRICS);
 				PrintWriter out = new PrintWriter(outCsvFile);
 				String fileName = this.downloadAllRunSections();
 				System.out.println(fileName);
@@ -162,15 +167,15 @@ public class TestRailMetricsGeneratorTool
 			
 			if(Base.runningOS.equals("Windows")) 
 			{
-				outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+				outCsvFile = new File(home + WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS);
 			}
 			else if(Base.runningOS.equals("Linux") || Base.runningOS.equals("MacOS")) 
 			{
-				outCsvFile = new File(home + "/Documents/consolidatedMetrics.csv");
+				outCsvFile = new File(home + LINUX_MACOS_PATH_SUITE_CONSOLIDATEDMETRICS);
 			}
 			else 
 			{
-				outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+				outCsvFile = new File(home + WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS);
 			}
 			
 			PrintWriter out = new PrintWriter(outCsvFile);
@@ -182,7 +187,7 @@ public class TestRailMetricsGeneratorTool
 		{
 			this.option = option;
 			String home = System.getProperty("user.home");
-			File outCsvFile = new File(home + "\\Documents\\sectionMetrics.csv");
+			File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
 			PrintWriter out = new PrintWriter(outCsvFile);
 			/*
 			System.out.print("From index >> ");
@@ -201,7 +206,7 @@ public class TestRailMetricsGeneratorTool
 		{
 			this.option = option;
 			String home = System.getProperty("user.home");
-			File outCsvFile = new File(home + "\\Documents\\testRunConsolidatedMetrics.csv");
+			File outCsvFile = new File(home + WINDOWS_PATH_RUN_CONSOLIDATEDMETRICS);
 			PrintWriter out = new PrintWriter(outCsvFile);
 			String fileName = this.downloadAllRunSections();
 			System.out.println(fileName);
