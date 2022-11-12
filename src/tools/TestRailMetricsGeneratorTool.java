@@ -166,7 +166,7 @@ public class TestRailMetricsGeneratorTool
 			}
 			else if(Base.runningOS.equals("Linux") || Base.runningOS.equals("MacOS")) 
 			{
-				outCsvFile = new File(home + "/consolidatedMetrics.csv");
+				outCsvFile = new File(home + "/Documents/consolidatedMetrics.csv");
 			}
 			else 
 			{
@@ -411,7 +411,13 @@ public class TestRailMetricsGeneratorTool
 	{
 		//File csvFile = new File("/home/vivi/Downloads/" + fileName);
 		String home = System.getProperty("user.home");
-		File inCsvFile = new File(home + "\\Downloads\\" + fileName);
+		File inCsvFile;
+		if(Base.runningOS.equals("Windows"))
+			inCsvFile = new File(home + "\\Downloads\\" + fileName);
+		else if(Base.runningOS.equals("Linux") || Base.runningOS.equals("MacOS"))
+			inCsvFile = new File(home + "/Downloads/" + fileName);
+		else
+			inCsvFile = new File(home + "\\Downloads\\" + fileName);
 		
 		String statusString = parseCsv(inCsvFile);
 		
