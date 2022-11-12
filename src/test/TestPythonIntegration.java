@@ -14,8 +14,9 @@ public class TestPythonIntegration
 		final int DOMAIN = 2;
 		final int EMAIL = 3;
 		final int PASSWORD = 4;
+		final int NUM_ARGS_NEEDED = 5;
 		
-		if(args.length != 4)
+		if(args.length != NUM_ARGS_NEEDED)
 		{
 			System.out.println("Not enough or too many arguments provided.. Exiting...");
 			return;
