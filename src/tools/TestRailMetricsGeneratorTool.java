@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import org.openqa.selenium.WebDriver;
 
+import resources.Base;
 import resources.TestRailLoginPage;
 import resources.TestRailRunsPage;
 import resources.TestRailSuitePage;
@@ -157,7 +158,21 @@ public class TestRailMetricsGeneratorTool
 		{
 			this.option = option;
 			String home = System.getProperty("user.home");
-			File outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+			File outCsvFile;
+			
+			if(Base.runningOS.equals("Windows")) 
+			{
+				outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+			}
+			else if(Base.runningOS.equals("Linux") || Base.runningOS.equals("MacOS")) 
+			{
+				outCsvFile = new File(home + "/consolidatedMetrics.csv");
+			}
+			else 
+			{
+				outCsvFile = new File(home + "\\Documents\\consolidatedMetrics.csv");
+			}
+			
 			PrintWriter out = new PrintWriter(outCsvFile);
 			String fileName = this.downloadAllSections();
 			this.composeAllTestCaseStatusMetrics(fileName, out);
