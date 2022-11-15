@@ -22,20 +22,12 @@ public class TestRailMetricsGeneratorTool
 {
 	private final String WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS = "\\Documents\\consolidatedMetrics.csv";
 	private final String LINUX_MACOS_PATH_SUITE_CONSOLIDATEDMETRICS = "/Documents/consolidatedMetrics.csv";
-	private final String WINDOWS_PATH_SUITE_SECTIONMETRICS = "\\Documents\\sectionMetrics.csv";
+	//private final String WINDOWS_PATH_SUITE_SECTIONMETRICS = "\\Documents\\sectionMetrics.csv";
 	private final String WINDOWS_PATH_RUN_CONSOLIDATEDMETRICS = "\\Documents\\testRunConsolidatedMetrics.csv";
 	
-	// DEPRECATED
-	int blocked;
-	int inReview;
-	int inProgress;
-	int readyForReview;
-	int testReviewed;
-	int ready; 
-	int link;
 	int total;
 	int secNum;
-	// END DEPRECATED
+	
 	
 	HashMap<String, Integer> testCaseStatus;
 	
@@ -53,30 +45,19 @@ public class TestRailMetricsGeneratorTool
 	String email;
 	String password;
 	String domain;
+	String suiteOrRunID;
 	
 	private final String DOWNLOAD_ALL_SUITE_SECTIONS = "Download all suite sections";
 	private final String DOWNLOAD_SELECT_SUITE_SECTIONS = "Download select suite sections";
 	private final String DOWNLOAD_ALL_RUN_SECTIONS = "Download all run sections";
 	private final int CSV_TITLE = 0;
 	private final int BR_SECTION = 2;
-	private final int TEST_CASE_COUNT = 3;
-	private final int PERCENT_COMPLETE = 4;
-	private final int STATUS = 5;
 	private int option;
 	private String[] tableDetails;// 7 elements
 	
-	private final int[] ESTIMATES = { 390, 109, 80, 95, 188, 20, 71, 36, 8, 42, 14, 0, 18, 
-			15, 19, 0, 7, 18, 10, 343, 4, 16, 23, 12, 56, 23, 14, 8, 49, 4, 19, 0, 25, 2 };
 	
 	public TestRailMetricsGeneratorTool()
 	{
-		blocked = 0; 
-		inReview = 0;
-		inProgress = 0;
-		readyForReview = 0;
-		testReviewed = 0;
-		ready = 0;
-		link = 0;
 		total = 0;
 		
 		testCaseStatus = new HashMap<String, Integer>();
@@ -88,6 +69,7 @@ public class TestRailMetricsGeneratorTool
 		tableDetails = new String[7];
 	}
 	
+	@Deprecated
 	public void mainMenu() throws IOException, InterruptedException 
 	{
 		boolean toolActive = true;
@@ -117,10 +99,10 @@ public class TestRailMetricsGeneratorTool
 			}
 			else if(option == 2) 
 			{
-				this.option = option;
-				String home = System.getProperty("user.home");
-				File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
-				PrintWriter out = new PrintWriter(outCsvFile);
+				//this.option = option;
+				//String home = System.getProperty("user.home");
+				//File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
+				//PrintWriter out = new PrintWriter(outCsvFile);
 				/*
 				System.out.print("From index >> ");
 				int fromIndex = in.nextInt();
@@ -130,9 +112,9 @@ public class TestRailMetricsGeneratorTool
 				this.composeAllTestCaseStatusMetrics(fileName);
 				*/
 				
-				specificSectionNumbers(out); // TODO: swap out with a way to identify section names
-				out.close();
-				secNum = 1;
+				//specificSectionNumbers(out); // TODO: swap out with a way to identify section names
+				//out.close();
+				//secNum = 1;
 			}
 			else if(option == 3) 
 			{
@@ -160,13 +142,14 @@ public class TestRailMetricsGeneratorTool
 		System.out.println("\nGoodbye\n");
 	}
 	
-	public void mainMenu(int option, String domain, String email, String password) throws IOException, InterruptedException 
+	public void mainMenu(int option, String domain, String email, String password, String suiteOrRunID) throws IOException, InterruptedException 
 	{
 		if(!domain.isEmpty() && !email.isEmpty() && !password.isEmpty()) 
 		{
 			this.domain = domain;
 			this.email = email;
 			this.password = password;
+			this.suiteOrRunID = suiteOrRunID;
 			this.loggedIn = true;
 		}
 		
@@ -196,10 +179,11 @@ public class TestRailMetricsGeneratorTool
 		}
 		else if(option == 2) 
 		{
-			this.option = option;
-			String home = System.getProperty("user.home");
-			File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
-			PrintWriter out = new PrintWriter(outCsvFile);
+			System.out.println("This option is still in development...");
+			//this.option = option;
+			//String home = System.getProperty("user.home");
+			//File outCsvFile = new File(home + WINDOWS_PATH_SUITE_SECTIONMETRICS);
+			//PrintWriter out = new PrintWriter(outCsvFile);
 			/*
 			System.out.print("From index >> ");
 			int fromIndex = in.nextInt();
@@ -208,10 +192,8 @@ public class TestRailMetricsGeneratorTool
 			String fileName = this.downloadSelectSections(fromIndex, toIndex);
 			this.composeAllTestCaseStatusMetrics(fileName);
 			*/
-				
-			specificSectionNumbers(out); // TODO: swap out with a way to identify section names
-			out.close();
-			secNum = 1;
+			//out.close();
+			//secNum = 1;
 		}
 		else if(option == 3) 
 		{
@@ -230,90 +212,10 @@ public class TestRailMetricsGeneratorTool
 	
 	private void resetValues() 
 	{
-		blocked = 0; 
-		inReview = 0;
-		inProgress = 0;
-		readyForReview = 0;
-		testReviewed = 0;
-		ready = 0;
-		link = 0;
+		testCaseStatus = new HashMap<String, Integer>();
 		total = 0;
 	}
 	
-	private void specificSectionNumbers(PrintWriter out) throws IOException, InterruptedException 
-	{
-		String fileName = this.downloadSelectSections(0, 35); // 2.1
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(36, 43); // 2.2
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(44, 56); // 2.3
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(57, 74); // 2.4
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(75, 83); // 2.5
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(84, 84); // 2.6
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(85, 90); // 2.7
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(91, 98); // 2.8
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(99, 99); // 2.9
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(100, 110); // 2.10
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(111, 118); // 2.11
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(119, 119); // 2.12
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(120, 124); // 2.13
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(125, 133); // 2.14
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(134, 136); // 2.15
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		
-		fileName = this.downloadSelectSections(137, 138); // 3.1
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(139, 141); // 3.2
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(142, 148); // 3.3
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(149, 151); // 3.4
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(152, 191); // 3.5
-		
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(192, 192); // 4.1
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(193, 195); // 4.2
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(196, 204); // 4.3
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(205, 207); // 4.4
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(208, 245); // 4.5
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(246, 250); // 4.6
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(251, 252); // 4.7
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		
-		fileName = this.downloadSelectSections(253, 254); // 5.1
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(255, 256); // 5.2
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(257, 260); // 5.3
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(261, 263); // 5.4
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(264, 265); // 5.5
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(266, 266); // 5.6
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-		fileName = this.downloadSelectSections(267, 268); // 5.7
-		this.composeAllTestCaseStatusMetrics(fileName, out);
-	}
 	
 	/**
 	 * Requests:
@@ -334,8 +236,8 @@ public class TestRailMetricsGeneratorTool
 		{
 			System.out.print("TestRail domain: ");
 			this.domain = in.nextLine();
-			trsp.setDomain(this.domain);
-			trrp.setDomain(this.domain);
+			trsp.setDomainAndSuite(this.domain, "33353");
+			trrp.setDomainAndRun(this.domain, "66685");
 			System.out.print("TestRail email: ");
 			this.email = in.nextLine();
 			trlp.setEmail(this.email);
@@ -347,8 +249,8 @@ public class TestRailMetricsGeneratorTool
 		}
 		else 
 		{
-			trrp.setDomain(this.domain);
-			trsp.setDomain(this.domain);
+			trrp.setDomainAndRun(this.domain, this.suiteOrRunID);
+			trsp.setDomainAndSuite(this.domain, this.suiteOrRunID);
 			trlp.setEmail(this.email);
 			trlp.setPassword(this.password);
 		}
@@ -361,6 +263,7 @@ public class TestRailMetricsGeneratorTool
 	}
 	
 	// Exports csv containing select suite sections
+	@Deprecated
 	private String downloadSelectSections(int fromSection, int toSection) throws InterruptedException 
 	{
 		return downloadHelper(DOWNLOAD_SELECT_SUITE_SECTIONS, fromSection, toSection);
@@ -388,8 +291,8 @@ public class TestRailMetricsGeneratorTool
 			trsp.getURL(driver);
 			trlp.login(driver);
 			fileName = trsp.downloadAllSections(driver);
-		}
-		else if(option.equals(DOWNLOAD_SELECT_SUITE_SECTIONS)) {
+		}//TODO: Update format to be generic for selecting specific sections in suite
+		else if(option.equals(DOWNLOAD_SELECT_SUITE_SECTIONS)) { 
 			trsp.getURL(driver);
 			trlp.login(driver);
 			String[] temp = new String[2];
@@ -439,7 +342,6 @@ public class TestRailMetricsGeneratorTool
 		
 		parseStatus(statusString);
 		addTotals();
-		printStatusTotals();
 		writeToCsv(out);
 	    
 		inCsvFile.delete();
@@ -478,9 +380,7 @@ public class TestRailMetricsGeneratorTool
 	}
 	
 	/** TODO:
-	 * Update to parse for all Test Case status's
-	 * 
-	 * Currently configured to parse specific test case status's
+	 *  Add ignore filter for user file fed statuses
 	 */
 	private void parseStatus(String statusString) 
 	{
@@ -518,27 +418,6 @@ public class TestRailMetricsGeneratorTool
 		System.out.println("Total to display: " + total);
 	}
 	
-	/**
-	 *  DEPRECATED
-	 */
-	private void printStatusTotals() 
-	{		
-		System.out.println("\nBlocked = " + blocked);
-		System.out.println("In Review = " + inReview);
-		System.out.println("In Progress = " + inProgress);
-		System.out.println("Ready For Review = " + readyForReview);
-		System.out.println("Test Reviewed = " + testReviewed);
-		System.out.println("Ready = " + ready);
-		System.out.println("Link = " + link);
-		System.out.println("Total = " + total);
-		
-		System.out.printf("\nBlocked = %.0f%%; In Review = %.0f%%; In Progress = %.0f%%; Ready For Review = %.0f%%; Test Reviewed = %.0f%%; Ready = %.0f%%; Link = %.0f%%\n",
-				((double) blocked / total) * 100, ((double) inReview / total) * 100, ((double) inProgress / total) * 100, ((double) readyForReview / total) * 100,
-				((double) testReviewed / total) * 100, ((double) ready / total) * 100, ((double) link / total) * 100);
-		System.out.printf("\nPercent complete based on original estimates: %.0f%%\n", ((double) total / 1767.0) * 100);
-		
-	}
-	
 	private void writeToCsv(PrintWriter out) throws FileNotFoundException 
 	{		
 		if(this.option == 1) 
@@ -556,19 +435,8 @@ public class TestRailMetricsGeneratorTool
 				out.printf("%s, %d, %.2f%%, %s\n", status, testCaseStatus.get(status), ((double) testCaseStatus.get(status) / total) * 100, this.BLOCKED_DESCRIPTION);
 			}
 			out.printf("Grand Total, %d, %.2f%%, %s\n", this.total, ((double) total / total) * 100, "Total number of test cases");
-			
-			/*
-			out.print("Test Case Status, Test Count, Test Count %, Description\n");
-			out.printf("Blocked, %d, %.2f%%, %s\n", this.blocked, ((double) blocked / total) * 100, this.BLOCKED_DESCRIPTION);
-			out.printf("In Review, %d, %.2f%%, %s\n", this.inReview, ((double) inReview / total) * 100, this.IN_REVIEW_DESCRIPTION);
-			out.printf("In Progress, %d, %.2f%%, %s\n", this.inProgress, ((double) inProgress / total) * 100, this.IN_PROGRESS_DESCRIPTION);
-			out.printf("Ready for Review, %d, %.2f%%, %s\n", this.readyForReview, ((double) readyForReview / total) * 100, this.READY_FOR_REVIEW_DESCRIPTION);
-			out.printf("Test Reviewed, %d, %.2f%%, %s\n", this.testReviewed, ((double) testReviewed / total) * 100, this.TEST_REVIEWED_DESCRIPTION);
-			out.printf("Ready, %d, %.2f%%, %s\n", this.ready, ((double) ready / total) * 100, this.READY_DESCRIPTION);
-			out.printf("Link, %d, %.2f%%, %s\n", this.link, ((double) link / total) * 100, this.LINK_DESCRIPTION);
-			out.printf("Grand Total, %d, %.2f%%, %s\n", this.total, ((double) total / total) * 100, "Total number of test cases");
-			*/
 		}
+		/*
 		else if(this.option == 2) 
 		{
 			this.tableDetails[TEST_CASE_COUNT] = Integer.toString(this.total);
@@ -585,5 +453,6 @@ public class TestRailMetricsGeneratorTool
 			
 			secNum++;
 		}
+		*/
 	}
 }

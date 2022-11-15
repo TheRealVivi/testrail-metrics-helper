@@ -12,7 +12,8 @@ import org.openqa.selenium.support.ui.Select;
 public class TestRailSuitePage extends Base
 {
 	protected String domain;
-	private String URL = "https://" + domain + ".testrail.net/index.php?/suites/view/33353&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
+	private String suiteID;
+	private String URL = "https://" + domain + ".testrail.net/index.php?/suites/view/" + suiteID + "&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
 	
 	private final By PROJECT_NAME_LINK = By.id("navigation-project");
 	
@@ -31,10 +32,11 @@ public class TestRailSuitePage extends Base
 		return new Select(driver.findElement(SECTION_SELECT));
 	}
 	
-	public void setDomain(String domain) 
+	public void setDomainAndSuite(String domain, String suite) 
 	{
 		this.domain = domain;
-		this.URL = "https://" + domain + ".testrail.net/index.php?/suites/view/33353&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
+		this.suiteID = suite;
+		this.URL = "https://" + domain + ".testrail.net/index.php?/suites/view/" + suite + "&group_by=cases:section_id&group_order=asc&display_deleted_cases=0";
 	}
 	
 	public void getURL(WebDriver driver) {

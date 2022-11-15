@@ -14,7 +14,8 @@ public class TestPythonIntegration
 		final int DOMAIN = 2;
 		final int EMAIL = 3;
 		final int PASSWORD = 4;
-		final int NUM_ARGS_NEEDED = 5;
+		final int SUITE_RUN_ID = 5;
+		final int NUM_ARGS_NEEDED = 6;
 		
 		if(args.length != NUM_ARGS_NEEDED)
 		{
@@ -27,7 +28,8 @@ public class TestPythonIntegration
 		String domain = args[DOMAIN];
 		String email = args[EMAIL];
 		String password = args[PASSWORD];
+		String suiteOrRunID = args[SUITE_RUN_ID];
 		TestRailMetricsGeneratorTool testRailTool = new TestRailMetricsGeneratorTool();
-		testRailTool.mainMenu(option, domain, email, password);
+		testRailTool.mainMenu(option, domain, email, password, suiteOrRunID);
 	}
 }

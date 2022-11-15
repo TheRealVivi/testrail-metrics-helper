@@ -5,13 +5,16 @@ import org.openqa.selenium.WebDriver;
 
 public class TestRailRunsPage extends TestRailSuitePage
 {
-	private String URL = "https://" + domain + ".testrail.net/index.php?/runs/view/60819&group_by=cases:section_id&group_order=asc&group_id=1840344";
+	private String runID;
+	private String URL = "https://" + domain + ".testrail.net/index.php?/runs/view/" + runID + "&group_by=cases:section_id&group_order=asc&group_id=1840344";
 	private final By TEST_RUN_NAME = By.className("content-header-title");
 	
-	public void setDomain(String domain) 
+	
+	public void setDomainAndRun(String domain, String run) 
 	{
 		this.domain = domain;
-		this.URL = "https://" + domain + ".testrail.net/index.php?/runs/view/60819&group_by=cases:section_id&group_order=asc&group_id=1840344";
+		this.runID = run;
+		this.URL = "https://" + domain + ".testrail.net/index.php?/runs/view/" + run + "&group_by=cases:section_id&group_order=asc&group_id=1840344";
 	}
 	
 	public void getURL(WebDriver driver) {
@@ -32,7 +35,7 @@ public class TestRailRunsPage extends TestRailSuitePage
 		this.getExportCsvOption(driver).click();
 		Thread.sleep(800);
 		this.getExportSubmitButton(driver).click();
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		
 		return runName;
 	}
