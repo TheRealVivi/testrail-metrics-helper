@@ -12,11 +12,11 @@ public class Base
 		WebDriver driver;
 		
 		if(runningOS.equals("Windows"))
-			System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "../webdrivers/Windows/chromedriver.exe");
 		else if(runningOS.equals("Linux") || runningOS.equals("MacOS"))
-			System.setProperty("webdriver.chrome.driver", "/home/vivi/webdrivers/chromedriver");
+			System.setProperty("webdriver.chrome.driver", "../webdrivers/Linux/chromedriver");
 		else
-			System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "../webdrivers/Linux/chromedriver");
 		
 		driver = new ChromeDriver();
 		

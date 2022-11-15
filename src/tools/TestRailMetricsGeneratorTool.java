@@ -98,7 +98,7 @@ public class TestRailMetricsGeneratorTool
 			{
 				this.option = option;
 				String home = System.getProperty("user.home");
-				File outCsvFile = new File(home + WINDOWS_PATH_SUITE_CONSOLIDATEDMETRICS);
+				File outCsvFile = new File(home + LINUX_MACOS_PATH_SUITE_CONSOLIDATEDMETRICS);
 				PrintWriter out = new PrintWriter(outCsvFile);
 				String fileName = this.downloadAllSections();
 				this.composeAllTestCaseStatusMetrics(fileName, out);
