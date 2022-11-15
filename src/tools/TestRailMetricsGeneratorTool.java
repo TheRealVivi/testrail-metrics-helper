@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Duration;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.openqa.selenium.WebDriver;
 
@@ -21,7 +25,7 @@ public class TestRailMetricsGeneratorTool
 	private final String WINDOWS_PATH_SUITE_SECTIONMETRICS = "\\Documents\\sectionMetrics.csv";
 	private final String WINDOWS_PATH_RUN_CONSOLIDATEDMETRICS = "\\Documents\\testRunConsolidatedMetrics.csv";
 	
-	// Test Case status's are to a specific TestRail project, will update later to make more general
+	// DEPRECATED
 	int blocked;
 	int inReview;
 	int inProgress;
@@ -31,7 +35,11 @@ public class TestRailMetricsGeneratorTool
 	int link;
 	int total;
 	int secNum;
+	// END DEPRECATED
 	
+	HashMap<String, Integer> testCaseStatus;
+	
+	// DEPRECATED
 	private final String BLOCKED_DESCRIPTION = "Unable to complete due to blocked process within pipeline";
 	private final String IN_REVIEW_DESCRIPTION = "Test case needs to be reviewed and have modifications applied";
 	private final String IN_PROGRESS_DESCRIPTION = "Test case is being worked on";
@@ -39,6 +47,7 @@ public class TestRailMetricsGeneratorTool
 	private final String TEST_REVIEWED_DESCRIPTION = "Ready to be reviewed by the Program Review team";
 	private final String READY_DESCRIPTION = "Ready to be reviewed by the customer";
 	private final String LINK_DESCRIPTION = "Test case up to standards; references need to be updated";
+	// END DEPRECATED
 	
 	boolean loggedIn;
 	String email;
@@ -69,6 +78,8 @@ public class TestRailMetricsGeneratorTool
 		ready = 0;
 		link = 0;
 		total = 0;
+		
+		testCaseStatus = new HashMap<String, Integer>();
 		
 		loggedIn = false;
 		option = 0;
@@ -479,20 +490,13 @@ public class TestRailMetricsGeneratorTool
 		{
 			if(statusString.charAt(i) == 10 || statusString.charAt(i) == 13) 
 			{
-				if(status.equalsIgnoreCase("\n\" Blocked\""))
-					blocked++;
-				else if(status.equalsIgnoreCase("\n\" In Review\""))
-					inReview++;
-				else if(status.equalsIgnoreCase("\n\" In Progress\""))
-					inProgress++;
-				else if(status.equalsIgnoreCase("\n\" Ready For Review\""))
-					readyForReview++;
-				else if(status.equalsIgnoreCase("\n\" Test Reviewed\""))
-					testReviewed++;
-				else if(status.equalsIgnoreCase("\n\" Ready\""))
-					ready++;
-				else if(status.equalsIgnoreCase("\n\" Link\""))
-					link++;
+				if(!testCaseStatus.containsKey(status) && !status.contains("Test Case Status") && !status.isBlank()) 
+				{
+					System.out.println("Status to be added: " + status);
+					testCaseStatus.put(status, 0);
+				}
+				else if(testCaseStatus.containsKey(status))
+					testCaseStatus.replace(status, testCaseStatus.get(status) + 1);
 				
 				status = "";
 			}
@@ -502,13 +506,20 @@ public class TestRailMetricsGeneratorTool
 	
 	private void addTotals() 
 	{
-		total = blocked + inReview + inProgress + readyForReview + testReviewed + ready + link;
+		//total = blocked + inReview + inProgress + readyForReview + testReviewed + ready + link;
+		Collection<Integer> totals = testCaseStatus.values();
+		
+		for(Integer x : totals) 
+		{
+			System.out.println("Next int to add: " + x);
+			total += x;
+		}
+		
+		System.out.println("Total to display: " + total);
 	}
 	
-	/** TODO:
-	 * Update to be able to print any test case status's
-	 * 
-	 * Currently configured to print specific test case status's
+	/**
+	 *  DEPRECATED
 	 */
 	private void printStatusTotals() 
 	{		
@@ -532,6 +543,21 @@ public class TestRailMetricsGeneratorTool
 	{		
 		if(this.option == 1) 
 		{
+			Set<String> statuses = testCaseStatus.keySet();
+			
+			Iterator<String> itS = statuses.iterator();
+			
+			out.print("Test Case Status, Test Count, Test Count %, Description\n");
+			String status;
+			while(itS.hasNext()) 
+			{
+				status = itS.next();
+				System.out.println("Next status: " + status);
+				out.printf("%s, %d, %.2f%%, %s\n", status, testCaseStatus.get(status), ((double) testCaseStatus.get(status) / total) * 100, this.BLOCKED_DESCRIPTION);
+			}
+			out.printf("Grand Total, %d, %.2f%%, %s\n", this.total, ((double) total / total) * 100, "Total number of test cases");
+			
+			/*
 			out.print("Test Case Status, Test Count, Test Count %, Description\n");
 			out.printf("Blocked, %d, %.2f%%, %s\n", this.blocked, ((double) blocked / total) * 100, this.BLOCKED_DESCRIPTION);
 			out.printf("In Review, %d, %.2f%%, %s\n", this.inReview, ((double) inReview / total) * 100, this.IN_REVIEW_DESCRIPTION);
@@ -541,6 +567,7 @@ public class TestRailMetricsGeneratorTool
 			out.printf("Ready, %d, %.2f%%, %s\n", this.ready, ((double) ready / total) * 100, this.READY_DESCRIPTION);
 			out.printf("Link, %d, %.2f%%, %s\n", this.link, ((double) link / total) * 100, this.LINK_DESCRIPTION);
 			out.printf("Grand Total, %d, %.2f%%, %s\n", this.total, ((double) total / total) * 100, "Total number of test cases");
+			*/
 		}
 		else if(this.option == 2) 
 		{
