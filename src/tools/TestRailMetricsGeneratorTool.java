@@ -414,7 +414,6 @@ public class TestRailMetricsGeneratorTool
 	 */
 	private void composeAllTestCaseStatusMetrics(String fileName, PrintWriter out) throws IOException 
 	{
-		//File csvFile = new File("/home/vivi/Downloads/" + fileName);
 		String home = System.getProperty("user.home");
 		File inCsvFile;
 		if(Base.runningOS.equals("Windows"))

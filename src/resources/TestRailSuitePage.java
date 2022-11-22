@@ -9,6 +9,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+
+/**
+ *  Represents the elements on the TestRail Suite Page
+ */
 public class TestRailSuitePage extends Base
 {
 	protected String domain;
@@ -21,6 +25,9 @@ public class TestRailSuitePage extends Base
 	
 	protected final By EXPORT_ALL_SECTIONS_RADIO_BUTTON = By.id("exportCsvSectionsAll");
 	protected final By EXPORT_SELECT_SECTIONS_ONLY_RADIO_BUTTON = By.id("exportCsvSectionsSelected");
+	protected final By COLUMNS_NONE_BUTTON = By.xpath("//a[@class=\'link\' and contains(text(), \'None\')]");
+	
+	protected final By COLUMNS_TEST_CASE_STATUS_CHECKBOX = By.id("exportCsvColumns_checkbox-cases:custom_testcasestatus");
 	
 	protected final By SECTION_SELECT = By.id("exportCsvSectionsSelection");
 	
@@ -65,6 +72,16 @@ public class TestRailSuitePage extends Base
 		return driver.findElement(EXPORT_SUBMIT_BUTTON);
 	}
 	
+	public WebElement getColumnsNoneButton(WebDriver driver) 
+	{
+		return driver.findElement(COLUMNS_NONE_BUTTON);
+	}
+	
+	public WebElement getColumnsTestCaseStatusCheckbox(WebDriver driver) 
+	{
+		return driver.findElement(COLUMNS_TEST_CASE_STATUS_CHECKBOX);
+	}
+	
 	public String downloadAllSections(WebDriver driver) throws InterruptedException 
 	{
 		
@@ -74,6 +91,8 @@ public class TestRailSuitePage extends Base
 		Thread.sleep(1000);
 		this.getExportCsvOption(driver).click();
 		Thread.sleep(800);
+		this.getColumnsNoneButton(driver).click();
+		this.getColumnsTestCaseStatusCheckbox(driver).click();
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
 		
