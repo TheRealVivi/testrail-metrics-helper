@@ -31,6 +31,8 @@ public class TestRailRunsPage extends TestRailSuitePage
 		Thread.sleep(1000);
 		this.getExportCsvOption(driver).click();
 		Thread.sleep(800);
+		this.getColumnsNoneButton(driver).click();
+		this.getColumnsTestCaseStatusCheckbox(driver).click();
 		this.getExportSubmitButton(driver).click();
 		Thread.sleep(3000);
 		
